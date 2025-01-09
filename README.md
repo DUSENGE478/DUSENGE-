@@ -85,4 +85,62 @@ if __name__ == '__main__':
 </html>
 pip install flask requests
 python app.py
-(payment done)
+(payment done) import requests
+
+# Function yo gukuraho amafaranga
+def withdraw_from_momo(phone_number, amount, reference):
+    # MTN API endpoint (itangwa na MTN, uhindure niba ari Airtel Money)
+    api_url = "https://api.mtn.com/v1/collection/withdraw"
+    
+    # API Credentials (uhindure izi credentials ukoresheje izo wahawe)
+    access_token = "YOUR_ACCESS_TOKEN"  # Fata token yawe kuri API ya MTN/Airtel
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+    }
+
+    # Payload y'icyifuzo cyo gukuraho amafaranga
+    payload = {
+        "phoneNumber": phone_number,  # Nomero y'umukiriya
+        "amount": amount,             # Amafaranga agomba gukurwa
+        "currency": "RWF",           # Ifaranga rikoreshwa
+        "externalId": reference,     # Reference y'icyifuzo (unique id)
+        "payerMessage": "Kwishyura", # Ubutumwa bugera ku mukiriya
+        "payeeNote": "Murakoze gukoresha serivisi yacu."  # Ubutumwa bwo gushimira
+    }
+
+    # Tangiza icyifuzo cyo gukuraho amafaranga
+    try:
+        response = requests.post(api_url, json=payload, headers=headers)
+        if response.status_code == 200 or response.status_code == 201:
+            return {"status": "success", "message": "Amafaranga yakuwemo neza.", "data": response.json()}
+        else:
+            return {"status": "error", "message": "Byanze: " + response.text}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+# Gusaba amafaranga kuri nomero runaka
+if __name__ == "__main__":
+    phone_number = "250788123456"  # Nomero ya MoMo
+    amount = 5000                  # Amafaranga yo gukuraho
+    reference = "INV-123456"       # Reference y'icyifuzo
+    result = withdraw_from_momo(phone_number, amount, reference)
+    print(result) 
+def get_access_token(api_key, api_secret):
+    token_url = "https://api.mtn.com/v1/oauth/token"  # Endpoint ya token
+    headers = {
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "api_key": api_key,
+        "api_secret": api_secret,
+    }
+    try:
+        response = requests.post(token_url, json=payload, headers=headers)
+        if response.status_code == 200:
+            return response.json().get("access_token")
+        else:
+            return None
+    except Exception as e:
+        return None
+
