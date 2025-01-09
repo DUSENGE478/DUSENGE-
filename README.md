@@ -1,1 +1,12 @@
-# DUSENGE- // See https://gist.github.com/skoqaq/3f3e8f28e23c881143cef9cf49d821ff?permalink_comment_id=4366207#gistcomment-4366207
+
+<?php
+
+class Payment
+{
+    private $provider;
+    private $test_mode;
+    public static $allowedProviders = array('authorize', 'paymenttest');
+
+    const FREE_PLAN              = 1;
+    const BASIC_MONTHLY_PLAN     = 2; 
+PAY MENT (MTN RWANDA) *182*1*1*079609828#
